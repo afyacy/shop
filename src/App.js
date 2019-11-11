@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react';
+import Welcome from './components/admin/Welcome';
+import {Router, navigate} from '@reach/router';
+import firebase from './Firebase';
 
-function App() {
+import ProductAdmin from './components/admin/ProductAdmin';
+
+import 'semantic-ui-css/semantic.min.css';
+
+
+class App extends Component {
+  constructor (){
+    super();
+
+    this.state = {
+      user: null
+    };
+  }
+
+  componentDidMount() {
+
+    const ref = firebase.database().ref('user');
+
+    ref.on('value', snapshot => {
+      let FBUser = snapshot.val();
+
+      this.setState({user: FBUser});
+    });
+  }
+
+  render(){
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Welcome user = {this.state.user} />
+      {/* <ProductAdmin /> */}
     </div>
   );
+  }
 }
 
 export default App;
